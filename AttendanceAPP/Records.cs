@@ -212,7 +212,7 @@ namespace AttendanceAPP
             string startDate = dateTimePickerStart.Value.ToString("yyyy-MM-dd");
             string endDate = dateTimePickerEnd.Value.ToString("yyyy-MM-dd");
             string fileName = $"Attendance_Records_{startDate}_to_{endDate}.csv";
-            CSVExporter.ExportToCSV(dataGrid, folderPath, fileName);
+            CSVExporter.ExportToCSV(dataGridView, folderPath, fileName);
         }
 
         private void dateTimePickerStart_ValueChanged(object sender, EventArgs e)
