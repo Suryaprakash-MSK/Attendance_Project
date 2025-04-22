@@ -29,17 +29,3 @@ CREATE TABLE [dbo].[UserFaceFeatures] (
     PRIMARY KEY CLUSTERED ([FeatureId] ASC),
     FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users] ([UserId]) ON DELETE CASCADE
 );
-
-DECLARE @SelectedDate DATE = '2025-04-18';
-
-SELECT 
-    u.UserId,
-    u.UserName,
-    CASE 
-        WHEN a.UserId IS NOT NULL THEN 'Present'
-        ELSE 'Absent'
-    END AS Status
-FROM Users u
-LEFT JOIN Attendance a
-    ON u.UserId = a.UserId AND a.Date = @SelectedDate
-ORDER BY u.UserName;
