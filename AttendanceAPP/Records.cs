@@ -162,7 +162,7 @@ namespace AttendanceAPP
                 pivotColumns.AppendLine($@",
             MAX(CASE WHEN a.Date = '{columnName}' THEN 'Present' ELSE 'Absent' END) AS [{columnName}]");
             }
-            /*
+            
             string query = $@"
                                 SELECT 
                                     u.UserName
@@ -172,8 +172,8 @@ namespace AttendanceAPP
                                     ON u.UserId = a.UserId AND a.Date BETWEEN @startDate AND @endDate
                                 GROUP BY u.UserName
                                 ORDER BY u.UserName;
-                            ";*/
-            
+                            ";
+            /*
             string query = $@"
                             SELECT 
                                 u.UserName
@@ -184,7 +184,7 @@ namespace AttendanceAPP
                             WHERE u.JoinDate <= @startDate
                             GROUP BY u.UserName
                             ORDER BY u.UserName;";
-
+            */
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))

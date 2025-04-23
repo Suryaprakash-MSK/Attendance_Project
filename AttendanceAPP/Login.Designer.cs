@@ -81,6 +81,7 @@
             // 
             btnLogIn.BackColor = SystemColors.ActiveCaptionText;
             btnLogIn.Cursor = Cursors.Hand;
+            btnLogIn.Enabled = false;
             btnLogIn.FlatAppearance.BorderColor = Color.DarkTurquoise;
             btnLogIn.FlatStyle = FlatStyle.Flat;
             btnLogIn.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);

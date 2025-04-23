@@ -3,6 +3,7 @@ using AForge.Video.DirectShow;
 using SeetaFace6Sharp;
 using System.Data.SqlClient;
 using System.Data;
+using System.Diagnostics;
 
 namespace AttendanceAPP
 {
@@ -13,6 +14,7 @@ namespace AttendanceAPP
         private Bitmap Cframe;
         private FaceDetector faceDetector;
         private FaceRecognizer faceRecognizer;
+        private MaskDetector maskDetector;
         private Rectangle faceRectangle;
         static int frame = 0;
 
@@ -28,7 +30,7 @@ namespace AttendanceAPP
             videoSource.NewFrame += videoSource_NewFrame;
             dataGrid.CellClick += dataGrid_CellContentClick;
 
-            //SetDefaultCameraResolution(videoSource, 640, 480);
+            SetDefaultCameraResolution(videoSource, 640, 480);
 
             LoadUserData();
             dataGrid.ColumnHeadersDefaultCellStyle.Font = new Font("Lucida", 10, FontStyle.Bold);
@@ -70,7 +72,7 @@ namespace AttendanceAPP
                     {
                         var imageData = currentBitmap.ToFaceImage();
                         FaceInfo[] infos = faceDetector.Detect(imageData);
-                        DrawDetectedFaces(currentBitmap, infos);
+                        DrawDetectedFaces(currentBitmap, infos, imageData);
 
                     }
                 }
@@ -81,19 +83,52 @@ namespace AttendanceAPP
                 Console.WriteLine(ex.ToString());
             }
         }
-        private void DrawDetectedFaces(Bitmap frame, FaceInfo[] infos)
+        private void DrawDetectedFaces(Bitmap frame, FaceInfo[] infos, FaceImage imageData)
         {
+            String display;
             using (Graphics g = Graphics.FromImage(frame))
             {
+                int count = infos.Length;
                 foreach (var info in infos)
                 {
                     Rectangle faceRect = new Rectangle(info.Location.X, info.Location.Y, info.Location.Width, info.Location.Height);
                     faceRectangle = faceRect;
+                    maskDetector = new MaskDetector();
 
                     using (Pen pen = new Pen(Color.Red, 2))
                     {
                         g.DrawRectangle(pen, faceRect);
                     }
+
+                    var resultMask = maskDetector.Detect(imageData, info);
+                    if (resultMask.Status == true)
+                    {
+                        display = $"Please remove Your Mask, \n No of Faces Detected:{count}";
+                    }
+                    else
+                    {
+                        if(count>=1)
+                        {
+                            if(count>1)
+                            {
+                                display = $"No of Faces Detected:{count},\n Only one User face should save at a time";
+                            }
+                            else
+                            {
+                                display = $"No of Faces Detected:{count}";
+                            }
+                        }
+                        else
+                        {
+                            display = "";
+                        }
+                    }
+                    using (Font font = new Font("Arial", 16, FontStyle.Bold))
+                    using (SolidBrush brush = new SolidBrush(count== 1 ? Color.GreenYellow : Color.Red))
+                    {
+                        g.DrawString(display, font, brush, new Point(0, 0));
+                    }
+                    Debug.WriteLine(count);
                 }
             }
             if (pictureBox.Image != null)
@@ -101,12 +136,9 @@ namespace AttendanceAPP
                 pictureBox.Image.Dispose();
             }
             pictureBox.Image = frame;
-
         }
-
         private void btnCapture_Click(object sender, EventArgs e)
         {
-
             Cframe = CropImage((Bitmap)pictureBox.Image, faceRectangle);
 
             if (Cframe != null)
@@ -143,7 +175,6 @@ namespace AttendanceAPP
                 MessageBox.Show("Please enter an age between 1 - 110");
                 return;
             }
-
             int userid = GetUserId(username);
             UseridTXT.Text = userid.ToString();
 

@@ -97,23 +97,22 @@
             progressBar.Name = "progressBar";
             progressBar.Size = new Size(782, 8);
             progressBar.Step = 1;
-            progressBar.Style = ProgressBarStyle.Continuous;
             progressBar.TabIndex = 21;
             // 
             // progresstime
             // 
-            progresstime.Interval = 25;
+            progresstime.Interval = 50;
             progresstime.Tick += progresstime_Tick;
             // 
             // labelProgress
             // 
             labelProgress.Anchor = AnchorStyles.Bottom;
             labelProgress.AutoSize = true;
-            labelProgress.Font = new Font("Lucida Fax", 13F, FontStyle.Bold | FontStyle.Italic);
+            labelProgress.Font = new Font("Lucida Fax", 9F, FontStyle.Bold | FontStyle.Italic);
             labelProgress.ForeColor = Color.DeepSkyBlue;
-            labelProgress.Location = new Point(325, 324);
+            labelProgress.Location = new Point(348, 320);
             labelProgress.Name = "labelProgress";
-            labelProgress.Size = new Size(132, 26);
+            labelProgress.Size = new Size(87, 17);
             labelProgress.TabIndex = 26;
             labelProgress.Text = "Loading....";
             // 
